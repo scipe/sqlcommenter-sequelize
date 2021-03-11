@@ -43,7 +43,7 @@ exports.wrapSequelize = (sequelize, include={}, options={}) => {
 		const commentStr = keys.map((key) => {
 			const uri_encoded_key = encodeURIComponent(key);
 			const uri_encoded_value = encodeURIComponent(comments[key]);
-			return `${uri_encoded_key}='${uri_encoded_value}'`;
+			return `${uri_encoded_key}=${uri_encoded_value}`;
 		}).join(',');
 
 		if (commentStr && commentStr.length > 0)
