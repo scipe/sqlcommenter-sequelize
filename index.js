@@ -1,9 +1,5 @@
 const { hasComment } = require('./util');
 
-const defaultFields = {
-	'route': true
-};
-
 /**
  * All available variables for the commenter are on the `util.fields` object
  * passing the excludes parameter will result in each item being excluded from
@@ -16,7 +12,6 @@ const defaultFields = {
  * @return {void}
  */
 exports.wrapSequelize = (sequelize, include={}, options={}) => {
-
 	/* c8 ignore next 2 */
 	if (sequelize.___alreadySQLCommenterWrapped___)
 		return;
@@ -28,31 +23,18 @@ exports.wrapSequelize = (sequelize, include={}, options={}) => {
 	sequelize.dialect.Query.prototype.run = function(sql, sql_options) {
 
 		// If a comment already exists, do not insert a new one.
-		// See internal issue #20.
-		if (hasComment(sql)) // Just proceed with the next function ASAP
+		if (hasComment(sql))
 			return run.apply(this, [sql, sql_options]);
 
 		const comments = {
+			...include,
 			client_timezone: this.sequelize.options.timezone,
-			db_driver: `sequelize:${sequelizeVersion}`
+			db_driver: `sequelize:${sequelizeVersion}`,
 		};
 
-		if (sequelize.__middleware__) {
-			const req = sequelize.__req__;
-
-			comments.route = req.route.path;
-		}
-
 		// Filter out keys whose values are undefined or aren't to be included by default.
-		const filtering = typeof include === 'object' && include && Object.keys(include).length > 0;
 		const keys = Object.keys(comments).filter((key) => {
-			/* c8 ignore next 6 */
-			if (!filtering)
-				return defaultFields[key] && comments[key];
-
-			// Otherwise since we are filtering, we have to
-			// see if the field is included and if it set.
-			return include[key] && comments[key];
+			return include[key] || comments[key];
 		});
 
 		// Finally sort the keys alphabetically.

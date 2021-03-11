@@ -20,7 +20,6 @@ if (!sequelize_version)
 	sequelize_version = require('sequelize/package').version;
 
 const {wrapSequelize} = require('../index');
-const {fields} = require('../util');
 const chai = require("chai");
 const expect = chai.expect;
 const seq_version = require('sequelize').version;
@@ -30,7 +29,7 @@ const createFakeSequelize = () => {
 		dialect: {
 			Query: {
 				prototype: {
-					run: (sql, options) => {
+					run: (sql) => {
 						return Promise.resolve(sql);
 					},
 					sequelize: {
@@ -150,4 +149,22 @@ describe("Excluding all variables", () => {
 		});
 		done();
 	});
+
+	it("check all possible tags for google cloud sql insights", (done) => {
+		// Allow a re-wrap.
+		fakeSequelize.___alreadySQLCommenterWrapped___ = false;
+		wrapSequelize(fakeSequelize, {
+			foo: true,
+			application:'myapp:1.0.0'
+		});
+
+		const want = `SELECT * FROM foo /*application='myapp%3A1.0.0',client_timezone='%2B00%3A00',db_driver='sequelize%3A6.5.0',foo='true'*/`;
+		const sql =  `SELECT * FROM foo`;
+
+		fakeSequelize.dialect.Query.prototype.run(sql).then((got) => {
+			expect(got).equals(want);
+		});
+		done();
+	});
+
 });

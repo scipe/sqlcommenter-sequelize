@@ -2,9 +2,13 @@
  * fields represent variables that can be made optional for commenter output
  */
 exports.fields = {
-	CLIENT_TIMEZONE: "client_timezone",
+	ACTION: "action",
+	CONTROLLER: "controller",
+	FRAMEWORK: "framework",
+	ROUTE: "route",
+	APPLICATION: "application",
 	DB_DRIVER: "db_driver",
-	ROUTE: "route"
+	CLIENT_TIMEZONE: "client_timezone",
 };
 
 /**
