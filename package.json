@@ -1,0 +1,28 @@
+{
+  "name": "sqlcommenter-sequelize",
+  "version": "0.0.1",
+  "description": "sqlcommenter is a plugin/middleware/wrapper to augment SQL statements from Sequelize.js with comments that can be used later to correlate user code with SQL statements.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scipe/sqlcommenter-sequelize.git"
+  },
+  "keywords": [
+    "sqlcommenter",
+    "sqlcommenter-gcp"
+  ],
+  "author": "Google, LLC.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scipe/sqlcommenter-sequelize/issues"
+  },
+  "homepage": "https://github.com/scipe/sqlcommenter-sequelize#readme",
+  "devDependencies": {
+    "chai": "^4.3.3",
+    "mocha": "^8.3.1",
+    "sequelize": "^6.5.0"
+  }
+}
